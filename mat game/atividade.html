@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Matemática: Funções do Primeiro Grau</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px 0;
+            width: 100px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Matemática Game</h1>
+        <p id="question"></p>
+        <input type="number" id="answer" step="0.01"/>
+        <button onclick="checkAnswer()">Enviar Resposta</button>
+        <p id="result"></p>
+        <p id="score"></p>
+    </div>
+
+    <script>
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function generateQuestions() {
+            for (let i = 0; i < 15; i++) {
+                let a = Math.floor(Math.random() * 10) + 1;
+                let b = Math.floor(Math.random() * 20) - 10;
+                let c = Math.floor(Math.random() * 20) - 10;
+                let question = { a: a, b: b, c: c, answer: (c - b) / a };
+                questions.push(question);
+            }
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            let question = questions[currentQuestionIndex];
+            document.getElementById('question').innerText = `Resolva para x: ${question.a}x + ${question.b} = ${question.c}`;
+            document.getElementById('answer').value = '';
+            document.getElementById('result').innerText = '';
+        }
+
+        function checkAnswer() {
+            let userAnswer = parseFloat(document.getElementById('answer').value);
+            let question = questions[currentQuestionIndex];
+            if (userAnswer === question.answer) {
+                document.getElementById('result').innerText = 'Correto!';
+                score++;
+            } else {
+                document.getElementById('result').innerText = `Incorreto. A resposta correta é ${question.answer.toFixed(2)}.`;
+            }
+            document.getElementById('score').innerText = `Pontuação: ${score}/${currentQuestionIndex + 1}`;
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                setTimeout(displayQuestion, 2000);
+            } else {
+                document.getElementById('result').innerText += ' Fim do jogo!';
+                document.getElementById('question').innerText = '';
+            }
+        }
+
+        generateQuestions();
+    </script>
+</body>
+</html>
